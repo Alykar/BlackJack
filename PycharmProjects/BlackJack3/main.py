@@ -1,6 +1,8 @@
 import random
 
-
+dic = {'myHand': "_hand", 'myScore': "_score", 'helpme': "help", 'moreCards': "_hitme",
+       'noMoreCards': "_enough", 'newGame': "_start", 'stopGame': "_stop", 'leaveGame': "_endgame"}
+'''_
 class Card:
     def __init__(self,  name='', suit='', weight=0):
         self.name = name
@@ -15,18 +17,10 @@ class Card:
 
     def __eq__(self, other):
         return self.weight == other.weight and other.weight == self.weight
+'''
 
 
 class Console:
-    myHand = "_hand"
-    myScore = "_score"
-    helpme = "help"
-    moreCards = "_hitme"
-    noMoreCards = "_enough"
-    newGame = "_start"
-    stopGame = "_stop"
-    leaveGame = "_endgame"
-
     def blackJack(self):
         print("BLACKJACK, YOU WON!\ndo you wish to try again?")
 
@@ -48,25 +42,26 @@ class Console:
 
     def nextIteration(self, score, hand, sScore, sHand):
         getText = input("what you gonna do? \n> ")
-        if getText == Console.helpme:
+        if getText == dic['helpme']:
             print(help)
             self.nextIteration(score, hand, sScore, sHand)
 
-        elif getText == Console.moreCards:
+        elif getText == dic['moreCards']:
             score, hand = Game().newCard(score, hand, 0)
             Game().checkScore(score, hand, sScore, sHand)
 
-        elif getText == Console.noMoreCards:
+        elif getText == dic['noMoreCards']:
             Game().dealerGame(score, hand, sScore, sHand)
 
-        elif getText == Console.myHand:
+        elif getText == dic['myHand']:
             print(hand)
             self.nextIteration(score, hand, sScore, sHand)
 
-        elif getText == Console.myScore:
+        elif getText == dic['myScore']:
             Console().score(score)
+            self.nextIteration(score, hand, sScore, sHand)
 
-        elif getText == Console.stopGame:
+        elif getText == dic['stopGame']:
             print('I will accept your surrender!')
             return
 
@@ -74,9 +69,9 @@ class Console:
             print('wrong command, try again')
             self.nextIteration(score, hand, sScore, sHand)
 
-help = 'help log:\n' + Console.stopGame + ' - end game\n' + Console.moreCards + ' - more cards\n' + \
-       Console.noMoreCards + ' - no more cards\n' + Console.myHand + ' - all your cards\n' + \
-       Console.myScore + ' - check your score\n' + Console.helpme + ' - commands'
+help = 'help log:\n' + dic['stopGame'] + ' - end game\n' + dic['moreCards'] + ' - more cards\n' + \
+       dic['noMoreCards'] + ' - no more cards\n' + dic['myHand'] + ' - all your cards\n' + \
+       dic['myScore'] + ' - check your score\n' + dic['helpme'] + ' - commands'
 
 
 class Game:
@@ -149,11 +144,11 @@ class Game:
 
 print(help)
 while True:
-    print('\nprint', Console.newGame, 'to start new game, or', Console.leaveGame, 'to leave.')
+    print('\nprint', dic['newGame'], 'to start new game, or', dic['leaveGame'], 'to leave.')
     phrase = input("> ")
-    if phrase == Console.newGame:
+    if phrase == dic['newGame']:
         Game().newGame()
-    elif phrase == Console.leaveGame:
+    elif phrase == dic['leaveGame']:
         print('game ended...')
         break
     else:
