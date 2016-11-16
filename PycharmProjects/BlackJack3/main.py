@@ -62,13 +62,13 @@ class Game:
             self.nextIteration(score, hand, sScore, sHand)
 
     def dealerGame(self, score, hand, sScore, sHand):
-        elif sScore > 21:
+        if sScore > 21:
             print('your hand:', hand, '\nand dealers hand:', sHand,
                   'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYOU WON!',
                   '\ndo you wish to try again?')
             return
 
-        if score < sScore or sScore == 21:
+        elif score < sScore or sScore == 21:
             print('your hand:', hand, '\nand dealers hand:', sHand,
                   'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYou lost...',
                   '\ndo you wish to try again?')
