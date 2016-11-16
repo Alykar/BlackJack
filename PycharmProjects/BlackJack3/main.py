@@ -61,22 +61,22 @@ class Game:
             print('now your score is:', score)
             self.nextIteration(score, hand, sScore, sHand)
 
-    def gameWithoutPlayer(self, score, hand, sScore, sHand):
-        if score < sScore or sScore == 21:
-            print('your hand:', hand, '\nand dealers hand:', sHand,
-                  'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYou lost...',
-                  '\ndo you wish to try again?')
-            return
-
+    def dealerGame(self, score, hand, sScore, sHand):
         elif sScore > 21:
             print('your hand:', hand, '\nand dealers hand:', sHand,
                   'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYOU WON!',
                   '\ndo you wish to try again?')
             return
 
+        if score < sScore or sScore == 21:
+            print('your hand:', hand, '\nand dealers hand:', sHand,
+                  'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYou lost...',
+                  '\ndo you wish to try again?')
+            return
+
         else:
             sScore, sHand = self.newCard(sScore, sHand, 1)
-            self.gameWithoutPlayer(score, hand, sScore, sHand)
+            self.dealerGame(score, hand, sScore, sHand)
 
     def nextIteration(self, score, hand, sScore, sHand):
         phrase = input("what you gonna do? \n> ")
@@ -89,7 +89,7 @@ class Game:
             self.checkScore(score, hand, sScore, sHand)
 
         elif phrase == '_enough':
-            self.gameWithoutPlayer(score, hand, sScore, sHand)
+            self.dealerGame(score, hand, sScore, sHand)
 
         elif phrase == '_hand':
             print(hand)
