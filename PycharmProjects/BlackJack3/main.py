@@ -94,7 +94,7 @@ while True:
     print(help, '\nprint "_start" to start new game, or "_endgame" to leave.')
     phrase = input("> ")
     if phrase == '_start':
-        Game.newGame()
+        Game().newGame()
     elif phrase == '_endgame':
         print('game ended...')
         break
