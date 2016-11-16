@@ -1,10 +1,6 @@
 import random
 
-help = '"_stop" - end game\n"_hitme" - more cards\n' \
-       '"_enough" - no more cards\n"_hand" - all your cards\n' \
-       '"_help" - view commands'
 
-'''
 class Card:
     def __init__(self,  name='', suit='', weight=0):
         self.name = name
@@ -19,7 +15,69 @@ class Card:
 
     def __eq__(self, other):
         return self.weight == other.weight and other.weight == self.weight
-'''
+
+
+class Console:
+    myHand = "_hand"
+    myScore = "_score"
+    helpme = "help"
+    moreCards = "_hitme"
+    noMoreCards = "_enough"
+    newGame = "_start"
+    stopGame = "_stop"
+    leaveGame = "_endgame"
+
+    def blackJack(self):
+        print("BLACKJACK, YOU WON!\ndo you wish to try again?")
+
+    def toMuch(self):
+        print('Your score over 21, you lost, prepare your cash!\ndo you wish to try again?')
+
+    def dealerWon(self, score, hand, sScore, sHand):
+        print('your hand:', hand, '\nand dealers hand:', sHand,
+              'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYou lost...',
+              '\ndo you wish to try again?')
+
+    def dealerLost(self, score, hand, sScore, sHand):
+        print('your hand:', hand, '\nand dealers hand:', sHand,
+              'dealer score is too big\nso...\nYOU WON!',
+              '\ndo you wish to try again?')
+
+    def score(self, score):
+        print('now your score is:', score)
+
+    def nextIteration(self, score, hand, sScore, sHand):
+        getText = input("what you gonna do? \n> ")
+        if getText == Console.helpme:
+            print(help)
+            self.nextIteration(score, hand, sScore, sHand)
+
+        elif getText == Console.moreCards:
+            score, hand = Game().newCard(score, hand, 0)
+            Game().checkScore(score, hand, sScore, sHand)
+
+        elif getText == Console.noMoreCards:
+            Game().dealerGame(score, hand, sScore, sHand)
+
+        elif getText == Console.myHand:
+            print(hand)
+            self.nextIteration(score, hand, sScore, sHand)
+
+        elif getText == Console.myScore:
+            Console().score(score)
+
+        elif getText == Console.stopGame:
+            print('I will accept your surrender!')
+            return
+
+        else:
+            print('wrong command, try again')
+            self.nextIteration(score, hand, sScore, sHand)
+
+help = 'help log:\n' + Console.stopGame + ' - end game\n' + Console.moreCards + ' - more cards\n' + \
+       Console.noMoreCards + ' - no more cards\n' + Console.myHand + ' - all your cards\n' + \
+       Console.myScore + ' - check your score\n' + Console.helpme + ' - commands'
+
 
 class Game:
     def fitScore(self, n, score):
@@ -52,56 +110,25 @@ class Game:
 
     def checkScore(self, score, hand, sScore, sHand):
         if score == 21:
-            print("BLACKJACK, YOU WON!\ndo you wish to try again?")
+            Console().blackJack()
 
         elif score > 21:
-            print('Your score over 21, you lost, prepare your cash!\ndo you wish to try again?')
+            Console().toMuch()
 
         elif score < 21:
-            print('now your score is:', score)
-            self.nextIteration(score, hand, sScore, sHand)
+            Console().score(score)
+            Console().nextIteration(score, hand, sScore, sHand)
 
     def dealerGame(self, score, hand, sScore, sHand):
         if sScore > 21:
-            print('your hand:', hand, '\nand dealers hand:', sHand,
-                  'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYOU WON!',
-                  '\ndo you wish to try again?')
-            return
+            Console().dealerLost(score, hand, sScore, sHand)
 
         elif score < sScore or sScore == 21:
-            print('your hand:', hand, '\nand dealers hand:', sHand,
-                  'dealer score is:', sScore, '\nand your score is:', score, '\nso...\nYou lost...',
-                  '\ndo you wish to try again?')
-            return
+            Console().dealerWon(score, hand, sScore, sHand)
 
         else:
             sScore, sHand = self.newCard(sScore, sHand, 1)
             self.dealerGame(score, hand, sScore, sHand)
-
-    def nextIteration(self, score, hand, sScore, sHand):
-        phrase = input("what you gonna do? \n> ")
-        if phrase == '_help':
-            print(help)
-            self.nextIteration(score, hand, sScore, sHand)
-
-        elif phrase == '_hitme':
-            score, hand = self.newCard(score, hand, 0)
-            self.checkScore(score, hand, sScore, sHand)
-
-        elif phrase == '_enough':
-            self.dealerGame(score, hand, sScore, sHand)
-
-        elif phrase == '_hand':
-            print(hand)
-            self.nextIteration(score, hand, sScore, sHand)
-
-        elif phrase == '_stop':
-            print('I will accept your surrender!')
-            return
-
-        else:
-            print('wrong command, try again')
-            self.nextIteration(score, hand, sScore, sHand)
 
     def newGame(self):
         score = 0
@@ -117,16 +144,16 @@ class Game:
         score, hand = self.newCard(score, hand, 0)
         print('now your score is:', score)
 
-        self.nextIteration(score, hand, sScore, sHand)
+        Console().nextIteration(score, hand, sScore, sHand)
         return
 
 print(help)
 while True:
-    print('\nprint "_start" to start new game, or "_endgame" to leave.')
+    print('\nprint', Console.newGame, 'to start new game, or', Console.leaveGame, 'to leave.')
     phrase = input("> ")
-    if phrase == '_start':
+    if phrase == Console.newGame:
         Game().newGame()
-    elif phrase == '_endgame':
+    elif phrase == Console.leaveGame:
         print('game ended...')
         break
     else:
